@@ -1,0 +1,45 @@
+{% extends 'fertiliti/base.html' %}
+{% block title %}Cycle Tracking – FertiliCare{% endblock %}
+{% block page_title %}Menstrual / Cycle Tracking{% endblock %}
+{% block content %}
+<div class="g2">
+  <div class="card">
+    <h3>📅 Log New Cycle</h3>
+    <form method="post">
+      {% csrf_token %}
+      <div class="fr"><label>Start Date</label><input type="date" name="start_date" required/></div>
+      <div class="fr"><label>End Date (optional)</label><input type="date" name="end_date"/></div>
+      <div class="fr"><label>Notes</label><textarea name="notes" rows="3" placeholder="Symptoms, flow level, mood..."></textarea></div>
+      <button type="submit" class="bp">Log Cycle</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3>📋 Cycle History</h3>
+    {% if entries %}
+      <table>
+        <thead><tr><th>#</th><th>Start Date</th><th>End Date</th><th>Notes</th></tr></thead>
+        <tbody>
+        {% for e in entries %}
+          <tr>
+            <td style="font-weight:600;color:var(--rd);">{{ forloop.counter }}</td>
+            <td>{{ e.start_date }}</td>
+            <td>{{ e.end_date|default:"Ongoing" }}</td>
+            <td style="font-size:.78rem;color:var(--tl);">{{ e.notes|truncatechars:35|default:"—" }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty"><div class="ei">📅</div><p>No cycle entries yet. Log your first entry!</p></div>
+    {% endif %}
+  </div>
+</div>
+<div class="card" style="background:linear-gradient(135deg,var(--rp),#fff);">
+  <h3>💡 Cycle Tips</h3>
+  <div class="g3" style="margin-top:8px;">
+    <div class="tip"><div class="ti">📌</div><div class="tt">Track Consistently</div><div class="ts">Log every cycle for accurate fertile window predictions</div></div>
+    <div class="tip"><div class="ti">🌡️</div><div class="tt">Basal Temperature</div><div class="ts">Track BBT daily to identify your ovulation day</div></div>
+    <div class="tip"><div class="ti">💧</div><div class="tt">Fertile Window</div><div class="ts">Typically days 11–17 of a 28-day cycle</div></div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'fertiliti/base.html' %}
+{% block title %}Appointments – FertiliCare{% endblock %}
+{% block page_title %}Appointment Reminders{% endblock %}
+{% block content %}
+<div class="g2">
+  <div class="card">
+    <h3>🏥 Schedule Appointment</h3>
+    <form method="post">
+      {% csrf_token %}
+      <div class="fr"><label>Title</label><input type="text" name="title" placeholder="e.g. Gynaecologist Check-up" required/></div>
+      <div class="fr"><label>Doctor / Specialist</label><input type="text" name="doctor" placeholder="Dr. Name (optional)"/></div>
+      <div class="fr"><label>Location / Clinic</label><input type="text" name="location" placeholder="Clinic name (optional)"/></div>
+      <div class="fr"><label>Date</label><input type="date" name="date" required/></div>
+      <div class="fr"><label>Time</label><input type="time" name="time" required/></div>
+      <div class="fr"><label>Notes</label><textarea name="notes" rows="2" placeholder="Preparation notes..."></textarea></div>
+      <button type="submit" class="bp">Add Appointment</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3>📋 All Appointments</h3>
+    {% if appointments %}
+      <table>
+        <thead><tr><th>Title</th><th>Date</th><th>Time</th><th>Doctor</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+        {% for a in appointments %}
+          <tr>
+            <td><strong>{{ a.title }}</strong>{% if a.location %}<div style="font-size:.74rem;color:var(--tl);">{{ a.location }}</div>{% endif %}</td>
+            <td style="font-size:.82rem;">{{ a.date }}</td>
+            <td style="font-size:.82rem;">{{ a.time|time:"H:i" }}</td>
+            <td style="font-size:.82rem;">{{ a.doctor|default:"—" }}</td>
+            <td>{% if a.date >= today %}<span class="badge bg">Upcoming</span>{% else %}<span class="badge ba">Past</span>{% endif %}</td>
+            <td><form method="post">{% csrf_token %}<input type="hidden" name="action" value="delete"/><input type="hidden" name="id" value="{{ a.id }}"/><button type="submit" class="bd">✕</button></form></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty"><div class="ei">🏥</div><p>No appointments scheduled yet</p></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'fertiliti/base.html' %}
+{% block title %}Insights – FertiliCare{% endblock %}
+{% block page_title %}Age-Based Fertility Insights{% endblock %}
+{% block content %}
+{% if age %}
+  <div class="stat" style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <div>
+      <div class="sl">Your Age</div>
+      <div class="sv">{{ age }}</div>
+      <div class="ss">
+        {% if age < 25 %}Peak Fertility Range — Your body is at its most fertile!
+        {% elif age < 30 %}High Fertility — Great time to plan your family journey.
+        {% elif age < 35 %}Good Fertility — Regular tracking and check-ups recommended.
+        {% elif age < 40 %}Moderate Fertility — Consider consulting a specialist soon.
+        {% else %}Advanced Maternal Age — Specialist guidance strongly recommended.{% endif %}
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div class="sl">Estimated chance per cycle</div>
+      <div class="sv">{% if age < 25 %}~25%{% elif age < 30 %}~22%{% elif age < 35 %}~18%{% elif age < 40 %}~12%{% else %}~5%{% endif %}</div>
+    </div>
+  </div>
+{% else %}
+  <div class="card" style="background:var(--rp);margin-bottom:20px;">
+    <p style="color:var(--tm);font-size:.88rem;">Age not set on your profile. <a href="/admin/" style="color:var(--rb);">Update your profile</a> to unlock personalised age-based insights.</p>
+  </div>
+{% endif %}
+
+<div class="card" style="margin-bottom:20px;">
+  <h3>📊 Fertility by Age</h3>
+  <div style="display:flex;border-radius:10px;overflow:hidden;margin-top:12px;">
+    <div style="flex:1;padding:16px 8px;text-align:center;background:{% if age and age < 25 %}var(--rb){% else %}var(--rp){% endif %};">
+      <div style="font-weight:700;font-size:.88rem;color:{% if age and age < 25 %}#fff{% else %}var(--rd){% endif %};">Under 25</div>
+      <div style="font-size:1.4rem;font-weight:700;color:{% if age and age < 25 %}#fff{% else %}var(--rb){% endif %};margin:4px 0;">~25%</div>
+      <div style="font-size:.68rem;color:{% if age and age < 25 %}rgba(255,255,255,.8){% else %}var(--tl){% endif %};">per cycle{% if age and age < 25 %}<br/>← You{% endif %}</div>
+    </div>
+    <div style="flex:1;padding:16px 8px;text-align:center;background:{% if age and age >= 25 and age < 30 %}var(--rb){% else %}var(--rp){% endif %};border-left:2px solid var(--rr);">
+      <div style="font-weight:700;font-size:.88rem;color:{% if age and age >= 25 and age < 30 %}#fff{% else %}var(--rd){% endif %};">25–29</div>
+      <div style="font-size:1.4rem;font-weight:700;color:{% if age and age >= 25 and age < 30 %}#fff{% else %}var(--rb){% endif %};margin:4px 0;">~22%</div>
+      <div style="font-size:.68rem;color:{% if age and age >= 25 and age < 30 %}rgba(255,255,255,.8){% else %}var(--tl){% endif %};">per cycle{% if age and age >= 25 and age < 30 %}<br/>← You{% endif %}</div>
+    </div>
+    <div style="flex:1;padding:16px 8px;text-align:center;background:{% if age and age >= 30 and age < 35 %}var(--rb){% else %}var(--rp){% endif %};border-left:2px solid var(--rr);">
+      <div style="font-weight:700;font-size:.88rem;color:{% if age and age >= 30 and age < 35 %}#fff{% else %}var(--rd){% endif %};">30–34</div>
+      <div style="font-size:1.4rem;font-weight:700;color:{% if age and age >= 30 and age < 35 %}#fff{% else %}var(--rb){% endif %};margin:4px 0;">~18%</div>
+      <div style="font-size:.68rem;color:{% if age and age >= 30 and age < 35 %}rgba(255,255,255,.8){% else %}var(--tl){% endif %};">per cycle{% if age and age >= 30 and age < 35 %}<br/>← You{% endif %}</div>
+    </div>
+    <div style="flex:1;padding:16px 8px;text-align:center;background:{% if age and age >= 35 and age < 40 %}var(--rb){% else %}var(--rp){% endif %};border-left:2px solid var(--rr);">
+      <div style="font-weight:700;font-size:.88rem;color:{% if age and age >= 35 and age < 40 %}#fff{% else %}var(--rd){% endif %};">35–39</div>
+      <div style="font-size:1.4rem;font-weight:700;color:{% if age and age >= 35 and age < 40 %}#fff{% else %}var(--rb){% endif %};margin:4px 0;">~12%</div>
+      <div style="font-size:.68rem;color:{% if age and age >= 35 and age < 40 %}rgba(255,255,255,.8){% else %}var(--tl){% endif %};">per cycle{% if age and age >= 35 and age < 40 %}<br/>← You{% endif %}</div>
+    </div>
+    <div style="flex:1;padding:16px 8px;text-align:center;background:{% if age and age >= 40 %}var(--rb){% else %}var(--rp){% endif %};border-left:2px solid var(--rr);">
+      <div style="font-weight:700;font-size:.88rem;color:{% if age and age >= 40 %}#fff{% else %}var(--rd){% endif %};">40+</div>
+      <div style="font-size:1.4rem;font-weight:700;color:{% if age and age >= 40 %}#fff{% else %}var(--rb){% endif %};margin:4px 0;">~5%</div>
+      <div style="font-size:.68rem;color:{% if age and age >= 40 %}rgba(255,255,255,.8){% else %}var(--tl){% endif %};">per cycle{% if age and age >= 40 %}<br/>← You{% endif %}</div>
+    </div>
+  </div>
+  <p style="font-size:.74rem;color:var(--tl);margin-top:10px;">These are statistical averages. Individual fertility varies. Always consult a qualified healthcare professional.</p>
+</div>
+
+<div class="g2">
+  <div class="card">
+    <h3>📅 Recent Cycle History</h3>
+    {% if cycles %}
+      <table>
+        <thead><tr><th>#</th><th>Start</th><th>End</th><th>Notes</th></tr></thead>
+        <tbody>
+        {% for c in cycles %}
+          <tr>
+            <td style="font-weight:600;color:var(--rd);">{{ forloop.counter }}</td>
+            <td>{{ c.start_date }}</td>
+            <td>{{ c.end_date|default:"Ongoing" }}</td>
+            <td style="font-size:.76rem;color:var(--tl);">{{ c.notes|truncatechars:25|default:"—" }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty"><div class="ei">📅</div><p>No cycle data yet.</p><a href="{% url 'cycle' %}" style="color:var(--rb);font-size:.84rem;">Start tracking →</a></div>
+    {% endif %}
+  </div>
+  <div class="card">
+    <h3>✅ Recommendations</h3>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;gap:11px;padding:11px;background:var(--rp);border-radius:9px;font-size:.82rem;"><span>📋</span><div><strong>Track Every Cycle</strong><div style="color:var(--tl);margin-top:3px;">Consistent tracking helps predict fertile windows accurately</div></div></div>
+      <div style="display:flex;gap:11px;padding:11px;background:var(--rp);border-radius:9px;font-size:.82rem;"><span>🩺</span><div><strong>Annual Check-ups</strong><div style="color:var(--tl);margin-top:3px;">Gynaecological visits and hormone panels are important</div></div></div>
+      <div style="display:flex;gap:11px;padding:11px;background:var(--rp);border-radius:9px;font-size:.82rem;"><span>🥗</span><div><strong>Mediterranean Diet</strong><div style="color:var(--tl);margin-top:3px;">One of the best diets for reproductive health</div></div></div>
+      <div style="display:flex;gap:11px;padding:11px;background:var(--rp);border-radius:9px;font-size:.82rem;"><span>💊</span><div><strong>Start Folic Acid Early</strong><div style="color:var(--tl);margin-top:3px;">Begin 3 months before trying to conceive</div></div></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

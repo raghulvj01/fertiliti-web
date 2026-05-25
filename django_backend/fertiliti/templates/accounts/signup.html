@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Sign Up – FertiliCare</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#6b1414,#9b2626,#8b1a1a);padding:20px;}
+.card{background:#fff;border-radius:20px;padding:44px 40px;width:100%;max-width:450px;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.logo{text-align:center;margin-bottom:26px;}
+.logo .icon{font-size:2.4rem;}
+.logo h1{font-family:'Playfair Display',serif;color:#6b1414;font-size:1.6rem;margin-top:6px;}
+.logo p{color:#9b4f4f;font-size:.82rem;margin-top:3px;}
+.fg{margin-bottom:14px;}
+.fg label{display:block;font-size:.75rem;font-weight:600;color:#5a2929;margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px;}
+.fg input{width:100%;padding:10px 13px;border:1.5px solid #f8d7d7;border-radius:9px;font-size:.9rem;font-family:'DM Sans',sans-serif;background:#fdecea;color:#2c1010;transition:border .2s;}
+.fg input:focus{outline:none;border-color:#9b2626;background:#fff;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.btn{width:100%;padding:12px;background:linear-gradient(135deg,#6b1414,#c0392b);color:#fff;border:none;border-radius:9px;font-size:.93rem;font-weight:600;cursor:pointer;margin-top:6px;font-family:'DM Sans',sans-serif;transition:transform .15s;}
+.btn:hover{transform:translateY(-2px);}
+.sw{text-align:center;margin-top:15px;color:#9b4f4f;font-size:.82rem;}
+.sw a{color:#c0392b;font-weight:600;text-decoration:none;}
+.err{background:#fdecea;border:1px solid #f5c6c6;border-radius:8px;padding:9px 13px;margin-bottom:14px;color:#c0392b;font-size:.8rem;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <div class="icon">🌸</div>
+    <h1>Create Account</h1>
+    <p>Start your fertility health journey today</p>
+  </div>
+  {% if form.errors %}
+    <div class="err">
+      {% for field in form %}{% for error in field.errors %}<div>{{ field.label }}: {{ error }}</div>{% endfor %}{% endfor %}
+      {% for error in form.non_field_errors %}<div>{{ error }}</div>{% endfor %}
+    </div>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="fg"><label>Username</label><input type="text" name="username" placeholder="Choose a username" value="{{ form.username.value|default:'' }}" autofocus required/></div>
+    <div class="fg"><label>Email</label><input type="email" name="email" placeholder="your@email.com" value="{{ form.email.value|default:'' }}" required/></div>
+    <div class="fg"><label>Age (optional)</label><input type="number" name="age" placeholder="e.g. 28" min="10" max="100" value="{{ form.age.value|default:'' }}"/></div>
+    <div class="row2">
+      <div class="fg"><label>Password</label><input type="password" name="password1" placeholder="Create password" required/></div>
+      <div class="fg"><label>Confirm Password</label><input type="password" name="password2" placeholder="Repeat password" required/></div>
+    </div>
+    <button type="submit" class="btn">Create Account</button>
+  </form>
+  <div class="sw">Already have an account? <a href="{% url 'login' %}">Sign in</a></div>
+</div>
+</body>
+</html>

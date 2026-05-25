@@ -1,0 +1,61 @@
+{% extends 'fertiliti/base.html' %}
+{% block title %}Dashboard – FertiliCare{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block content %}
+<div class="g3" style="margin-bottom:20px;">
+  <div class="stat"><div class="sl">Last Cycle Start</div><div class="sv">{% if last_cycle %}{{ last_cycle.start_date|date:"M d" }}{% else %}—{% endif %}</div><div class="ss">{% if last_cycle %}{{ last_cycle.start_date|date:"Y" }}{% else %}No cycle logged{% endif %}</div></div>
+  <div class="stat"><div class="sl">Active Medicines</div><div class="sv">{{ active_medicines|length }}</div><div class="ss">reminders set</div></div>
+  <div class="stat"><div class="sl">Upcoming Appointments</div><div class="sv">{{ upcoming_appointments|length }}</div><div class="ss">scheduled ahead</div></div>
+</div>
+<div class="g2">
+  <div class="card">
+    <h3>📅 Upcoming Appointments</h3>
+    {% if upcoming_appointments %}
+      {% for a in upcoming_appointments %}
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--rr);">
+          <div><div style="font-weight:600;font-size:.88rem;">{{ a.title }}</div><div style="font-size:.76rem;color:var(--tl);">{{ a.date }} at {{ a.time|time:"H:i" }}{% if a.doctor %} · {{ a.doctor }}{% endif %}</div></div>
+          <span class="badge br">Upcoming</span>
+        </div>
+      {% endfor %}
+      <a href="{% url 'appointments' %}" style="font-size:.8rem;color:var(--rb);text-decoration:none;display:block;margin-top:10px;">View all →</a>
+    {% else %}
+      <div class="empty"><div class="ei">🏥</div><p>No upcoming appointments</p></div>
+    {% endif %}
+  </div>
+  <div class="card">
+    <h3>💊 Active Medicines</h3>
+    {% if active_medicines %}
+      {% for m in active_medicines %}
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--rr);">
+          <div><div style="font-weight:600;font-size:.88rem;">{{ m.name }}</div><div style="font-size:.76rem;color:var(--tl);">{{ m.dosage }} · {{ m.get_frequency_display }} · {{ m.time|time:"H:i" }}</div></div>
+          <span class="badge bg">Active</span>
+        </div>
+      {% endfor %}
+      <a href="{% url 'medicine' %}" style="font-size:.8rem;color:var(--rb);text-decoration:none;display:block;margin-top:10px;">View all →</a>
+    {% else %}
+      <div class="empty"><div class="ei">💊</div><p>No medicines added yet</p></div>
+    {% endif %}
+  </div>
+  <div class="card">
+    <h3>🥗 Today's Diet – {{ today }}</h3>
+    {% if today_diet %}
+      {% for d in today_diet %}
+        <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--rr);font-size:.85rem;">
+          <span><strong>{{ d.meal_type }}</strong> – {{ d.food_item }}</span>
+          {% if d.calories %}<span style="color:var(--tl);">{{ d.calories }} kcal</span>{% endif %}
+        </div>
+      {% endfor %}
+      <a href="{% url 'diet' %}" style="font-size:.8rem;color:var(--rb);text-decoration:none;display:block;margin-top:10px;">Manage diet →</a>
+    {% else %}
+      <div class="empty"><div class="ei">🥗</div><p>No meals logged today</p><a href="{% url 'diet' %}" style="color:var(--rb);font-size:.83rem;">Add meals →</a></div>
+    {% endif %}
+  </div>
+  <div class="card">
+    <h3>⚡ Quick Actions</h3>
+    <a href="{% url 'cycle' %}" class="ql">📅 Log new cycle entry</a>
+    <a href="{% url 'medicine' %}" class="ql">💊 Add medicine reminder</a>
+    <a href="{% url 'lifestyle' %}" class="ql">🧘 Log today's lifestyle</a>
+    <a href="{% url 'insights' %}" class="ql">📊 View fertility insights</a>
+  </div>
+</div>
+{% endblock %}

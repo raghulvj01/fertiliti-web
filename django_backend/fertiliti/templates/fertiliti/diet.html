@@ -1,0 +1,41 @@
+{% extends 'fertiliti/base.html' %}
+{% block title %}Diet Plans – FertiliCare{% endblock %}
+{% block page_title %}Personalized Diet Plans{% endblock %}
+{% block content %}
+<div class="g2">
+  <div class="card">
+    <h3>🥗 Log Today's Meal</h3>
+    <form method="post">
+      {% csrf_token %}
+      <div class="fr"><label>Meal Type</label><select name="meal_type"><option value="Breakfast">Breakfast</option><option value="Lunch">Lunch</option><option value="Dinner">Dinner</option><option value="Snack">Snack</option></select></div>
+      <div class="fr"><label>Food Item</label><input type="text" name="food_item" placeholder="e.g. Spinach and Lentil Salad" required/></div>
+      <div class="fr"><label>Calories (optional)</label><input type="number" name="calories" placeholder="e.g. 320" min="0"/></div>
+      <button type="submit" class="bp">Log Meal</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3>📋 Today's Meals – {{ today }}</h3>
+    {% if plans %}
+      {% for p in plans %}
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--rp);border-radius:8px;margin-bottom:7px;">
+          <div><span style="font-size:.86rem;font-weight:600;">{{ p.meal_type }}</span> <span style="font-size:.84rem;">– {{ p.food_item }}</span>{% if p.calories %}<span style="font-size:.76rem;color:var(--tl);margin-left:6px;">{{ p.calories }} kcal</span>{% endif %}</div>
+          <form method="post">{% csrf_token %}<input type="hidden" name="action" value="delete"/><input type="hidden" name="id" value="{{ p.id }}"/><button type="submit" class="bd">✕</button></form>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty"><div class="ei">🥗</div><p>No meals logged today</p></div>
+    {% endif %}
+  </div>
+</div>
+<div class="card">
+  <h3>🌿 Fertility-Boosting Foods Guide</h3>
+  <div class="g3" style="margin-top:10px;">
+    <div class="tip" style="text-align:left;"><div class="ti">🥬</div><div class="tt">Folate-Rich Foods</div><div class="ts">Spinach, lentils, asparagus, avocado, broccoli</div></div>
+    <div class="tip" style="text-align:left;"><div class="ti">🐟</div><div class="tt">Healthy Proteins</div><div class="ts">Fatty fish, eggs, lean chicken, tofu, Greek yoghurt</div></div>
+    <div class="tip" style="text-align:left;"><div class="ti">🫐</div><div class="tt">Antioxidants</div><div class="ts">Blueberries, walnuts, dark chocolate, tomatoes</div></div>
+    <div class="tip" style="text-align:left;"><div class="ti">🌾</div><div class="tt">Whole Grains</div><div class="ts">Oats, quinoa, brown rice, whole wheat bread</div></div>
+    <div class="tip" style="text-align:left;"><div class="ti">🥛</div><div class="tt">Dairy and Calcium</div><div class="ts">Full-fat dairy, kefir, fortified plant milks</div></div>
+    <div class="tip" style="text-align:left;border:1px dashed var(--rl);"><div class="ti">❌</div><div class="tt" style="color:var(--rb);">Limit / Avoid</div><div class="ts">Alcohol, excess caffeine, processed foods, trans fats</div></div>
+  </div>
+</div>
+{% endblock %}

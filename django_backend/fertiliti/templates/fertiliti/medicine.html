@@ -1,0 +1,53 @@
+{% extends 'fertiliti/base.html' %}
+{% block title %}Medicine – FertiliCare{% endblock %}
+{% block page_title %}Medicine Reminder System{% endblock %}
+{% block content %}
+<div class="g2">
+  <div class="card">
+    <h3>💊 Add Medicine Reminder</h3>
+    <form method="post">
+      {% csrf_token %}
+      <div class="fr"><label>Medicine Name</label><input type="text" name="name" placeholder="e.g. Folic Acid" required/></div>
+      <div class="fr"><label>Dosage</label><input type="text" name="dosage" placeholder="e.g. 400 mcg" required/></div>
+      <div class="fr"><label>Frequency</label><select name="frequency"><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option></select></div>
+      <div class="fr"><label>Reminder Time</label><input type="time" name="time" required/></div>
+      <button type="submit" class="bp">Add Reminder</button>
+    </form>
+  </div>
+  <div class="card">
+    <h3>📋 Active Reminders</h3>
+    {% if reminders %}
+      <table>
+        <thead><tr><th>Medicine</th><th>Dosage</th><th>Freq</th><th>Time</th><th></th></tr></thead>
+        <tbody>
+        {% for r in reminders %}
+          <tr>
+            <td><strong>{{ r.name }}</strong></td>
+            <td>{{ r.dosage }}</td>
+            <td>{{ r.get_frequency_display }}</td>
+            <td>{{ r.time|time:"H:i" }}</td>
+            <td>
+              <form method="post">{% csrf_token %}<input type="hidden" name="action" value="delete"/><input type="hidden" name="id" value="{{ r.id }}"/><button type="submit" class="bd">Remove</button></form>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty"><div class="ei">💊</div><p>No medicine reminders yet</p></div>
+    {% endif %}
+  </div>
+</div>
+<div class="card" style="background:var(--rp);">
+  <h3>🌿 Common Fertility Supplements</h3>
+  <div class="g3" style="margin-top:10px;">
+    <div style="padding:12px;background:#fff;border-radius:9px;border-left:3px solid var(--rb);"><strong style="font-size:.86rem;color:var(--rd);">Folic Acid</strong><div style="font-size:.76rem;color:var(--tl);margin-top:4px;">400–800 mcg/day · Reduces neural tube defects</div></div>
+    <div style="padding:12px;background:#fff;border-radius:9px;border-left:3px solid var(--rb);"><strong style="font-size:.86rem;color:var(--rd);">Vitamin D</strong><div style="font-size:.76rem;color:var(--tl);margin-top:4px;">1000–2000 IU/day · Hormonal balance</div></div>
+    <div style="padding:12px;background:#fff;border-radius:9px;border-left:3px solid var(--rb);"><strong style="font-size:.86rem;color:var(--rd);">CoQ10</strong><div style="font-size:.76rem;color:var(--tl);margin-top:4px;">200–600 mg/day · Egg quality</div></div>
+    <div style="padding:12px;background:#fff;border-radius:9px;border-left:3px solid var(--rb);"><strong style="font-size:.86rem;color:var(--rd);">Iron</strong><div style="font-size:.76rem;color:var(--tl);margin-top:4px;">18–27 mg/day · Blood health</div></div>
+    <div style="padding:12px;background:#fff;border-radius:9px;border-left:3px solid var(--rb);"><strong style="font-size:.86rem;color:var(--rd);">Omega-3</strong><div style="font-size:.76rem;color:var(--tl);margin-top:4px;">1000 mg/day · Reduces inflammation</div></div>
+    <div style="padding:12px;background:#fff;border-radius:9px;border-left:3px solid var(--rb);"><strong style="font-size:.86rem;color:var(--rd);">Zinc</strong><div style="font-size:.76rem;color:var(--tl);margin-top:4px;">8–11 mg/day · Regulates ovulation</div></div>
+  </div>
+  <p style="font-size:.74rem;color:var(--tl);margin-top:12px;">⚠️ Always consult your doctor before starting any supplement.</p>
+</div>
+{% endblock %}
