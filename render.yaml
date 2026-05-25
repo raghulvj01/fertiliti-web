@@ -1,11 +1,13 @@
 services:
   - type: web
     name: fertiliti-web
-    env: python
+    runtime: python
     rootDir: django_backend
     plan: free
     buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    preDeployCommand: python manage.py migrate
     startCommand: gunicorn fertiliti.wsgi:application --bind 0.0.0.0:$PORT
+    healthCheckPath: /health/
     autoDeploy: true
     envVars:
       - key: SECRET_KEY

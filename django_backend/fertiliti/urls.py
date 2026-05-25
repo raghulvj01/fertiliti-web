@@ -1,8 +1,14 @@
 from django.contrib import admin
+from django.http import JsonResponse
 from django.urls import path, include
 from tracker import views as tracker_views
 
+
+def health_check(request):
+    return JsonResponse({'status': 'ok'})
+
 urlpatterns = [
+    path('health/', health_check, name='health'),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('dashboard/', tracker_views.dashboard, name='dashboard'),
